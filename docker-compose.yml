@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  jotihunt-notifier:
-    image: ghcr.io/scoutingscherpenzeel/jotihunt-telegram-notifier:latest
+  jotihunt-discord-notifier:
+    image: ghcr.io/scoutingscherpenzeel/jotihunt-discord-notifier:latest
     environment:
       - DISCORD_BOT_TOKEN=
       - DISCORD_CHANNEL_ID=
