@@ -13,7 +13,7 @@ load_dotenv()
 
 # Read environment variables
 discord_token = os.getenv('DISCORD_BOT_TOKEN')
-discord_channel_id = int(os.getenv('DISCORD_CHANNEL_ID'))
+discord_channel_id = int(os.getenv('DISCORD_JOTIHUNT_CHANNEL_ID'))
 api_url = os.getenv('API_URL', 'https://jotihunt.nl/api/2.0/articles')  # Default API URL
 article_base_url = os.getenv('ARTICLE_BASE_URL', 'https://jotihunt.nl/article/')  # Default base URL
 sent_articles_file = 'sent_articles.json'  # File to store sent articles

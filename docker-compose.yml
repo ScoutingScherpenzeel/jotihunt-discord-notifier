@@ -5,7 +5,7 @@ services:
     image: ghcr.io/scoutingscherpenzeel/jotihunt-discord-notifier:latest
     environment:
       - DISCORD_BOT_TOKEN=
-      - DISCORD_CHANNEL_ID=
+      - DISCORD_JOTIHUNT_CHANNEL_ID=
     volumes:
       - ./sent_articles.json:/app/sent_articles.json
     restart: unless-stopped # Automatically restart the bot unless it is stopped manually
