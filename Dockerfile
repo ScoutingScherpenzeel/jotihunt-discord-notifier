@@ -1,8 +1,10 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
+# Set the timezone environment variable
 ENV TZ=Europe/Amsterdam
 
+# Install tzdata package to set the timezone
 RUN apt-get update && \
     apt-get install -y --no-install-recommends tzdata && \
     rm -rf /var/lib/apt/lists/*
