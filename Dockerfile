@@ -1,6 +1,12 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
+ENV TZ=Europe/Amsterdam
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends tzdata && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set the working directory in the container
 WORKDIR /app
 
