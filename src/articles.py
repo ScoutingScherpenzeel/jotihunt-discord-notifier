@@ -1,10 +1,11 @@
 import logging
+import re
 from datetime import datetime
 from typing import Any
 
 import discord
-import html2text
 from bs4 import BeautifulSoup
+from markdownify import markdownify as md
 
 from .config import (
     ARTICLE_BASE_URL,
@@ -16,7 +17,7 @@ from .config import (
 logger = logging.getLogger(__name__)
 
 
-def clean_html_to_markdown(
+def clean_html_to_discord(
     raw_html: str,
 ) -> tuple[str, str | None]:
     soup = BeautifulSoup(
@@ -26,31 +27,35 @@ def clean_html_to_markdown(
 
     first_image_url: str | None = None
 
+    image = soup.find("img")
+
+    if image and image.get("src"):
+        first_image_url = str(
+            image["src"]
+        )
+
+    # Images are displayed separately in the Discord embed.
     for figure in soup.find_all("figure"):
-        if first_image_url is None:
-            image = figure.find("img")
-
-            if image:
-                source = image.get("src")
-
-                if source:
-                    first_image_url = str(source)
-
         figure.decompose()
 
-    converter = html2text.HTML2Text()
+    markdown = md(
+        str(soup),
+        heading_style="ATX",
+        bullets="•",
+    )
 
-    converter.ignore_links = False
-    converter.ignore_images = True
-    converter.body_width = 0
-    converter.single_line_break = True
-    converter.skip_internal_links = True
+    # Trix/Jotihunt HTML contains a lot of <br> elements,
+    # which can result in excessive blank lines.
+    markdown = re.sub(
+        r"\n{3,}",
+        "\n\n",
+        markdown,
+    )
 
-    markdown = converter.handle(
-        str(soup)
-    ).strip()
-
-    return markdown, first_image_url
+    return (
+        markdown.strip(),
+        first_image_url,
+    )
 
 
 def format_dutch_date(
@@ -87,7 +92,10 @@ def truncate(
     if limit <= 3:
         return value[:limit]
 
-    return value[: limit - 3].rstrip() + "..."
+    return (
+        value[: limit - 3].rstrip()
+        + "..."
+    )
 
 
 def build_article_message(
@@ -107,7 +115,9 @@ def build_article_message(
         DISCORD_EMBED_TITLE_LIMIT,
     )
 
-    message = article.get("message")
+    message = article.get(
+        "message"
+    )
 
     if not isinstance(
         message,
@@ -129,7 +139,7 @@ def build_article_message(
         )
 
     cleaned_message, image_url = (
-        clean_html_to_markdown(
+        clean_html_to_discord(
             raw_content
         )
     )
@@ -152,14 +162,19 @@ def build_article_message(
         publish_at,
         str,
     ):
-        formatted_date = format_dutch_date(
-            publish_at
+        formatted_date = (
+            format_dutch_date(
+                publish_at
+            )
         )
     else:
-        formatted_date = "Onbekende datum"
+        formatted_date = (
+            "Onbekende datum"
+        )
 
     article_url = (
-        f"{ARTICLE_BASE_URL}{article_id}"
+        f"{ARTICLE_BASE_URL}"
+        f"{article_id}"
     )
 
     embed = discord.Embed(
