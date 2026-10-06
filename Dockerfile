@@ -1,4 +1,4 @@
-FROM python:3.15-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
@@ -10,4 +10,4 @@ COPY src ./src
 
 RUN mkdir -p /app/data
 
-CMD ["python", "-m", "src.main"]`
+CMD ["python", "-m", "src.main"]
