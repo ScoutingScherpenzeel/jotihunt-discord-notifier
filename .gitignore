@@ -1,8 +1,21 @@
-*.pyc
-venv
-.vscode
-__pycache__
-*.exe
+# Environment
 .env
-sent_articles.json
-audioop.py
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Runtime data
+data/*.json
+
+# OS
+.DS_Store

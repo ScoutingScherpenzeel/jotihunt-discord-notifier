@@ -1,5 +1,5 @@
-discord.py
-python-dotenv
+aiohttp
 beautifulsoup4
-requests
+discord.py
 html2text
+python-dotenv
